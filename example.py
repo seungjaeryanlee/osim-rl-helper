@@ -27,4 +27,4 @@ if __name__ == '__main__':
         # Run agent locally
         env = ProstheticsEnv(visualize=True)
         agent = RandomAgent(env)
-        agent.play(env)
+        agent.test(env)

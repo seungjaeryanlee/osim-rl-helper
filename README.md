@@ -15,10 +15,10 @@ from helper.template import Agent
 
 The `helper.template.Agent` is a template class for agents. It has two functions implemented:
 
- * `play()` runs the agent locally.
+ * `test()` runs the agent locally.
  * `submit()` submits the agent to the CrowdAI server.
 
-Both `play()` and `submit()` use `Agent.act()` to select action, so you need to implement it. Check the `RandomAgent.act()` for an example.
+Both `test()` and `submit()` use `Agent.act()` to select action, so you need to implement it. Check the `RandomAgent.act()` for an example.
 
 ```python
 class RandomAgent(Agent):
@@ -48,7 +48,7 @@ if __name__ == '__main__':
         # Run agent locally
         env = ProstheticsEnv(visualize=True)
         agent = RandomAgent(env)
-        agent.play(env)
+        agent.test(env)
 ```
 
 To help you run agent locally or submit agent easily, we used an argument parser. You can run the agent locally with the following command:

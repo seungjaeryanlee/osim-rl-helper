@@ -18,7 +18,7 @@ class Agent:
     def act(self, observation):        
         pass
 
-    def play(self, env):
+    def test(self, env):
         """
         Run agent locally.
         """
