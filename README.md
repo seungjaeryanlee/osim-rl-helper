@@ -1,67 +1,55 @@
 # Helper for NIPS 2018: AI for Prosthetics
 
-This is a small repository containing a `helper` package that contains templates and small snipplets of code to help you start the [AI for Prosthetics](https://github.com/stanfordnmbl/osim-rl) challenge.
+This is a small repository containing a `helper` package that contains a few baseline agents to help you start the [AI for Prosthetics](https://github.com/stanfordnmbl/osim-rl) challenge.
+
+
 
 ## How to Start
 
-`example.py` contains an example of how to use the helper package.
+The package contains `run.py` that can test or submit any agent in `/helper/baselines` or `/agent` directory. For example, to test `RandomAgent` locally, run
 
-```python
-import argparse
-from osim.env import ProstheticsEnv
-
-from helper.template import Agent
+```bash
+./run.py RandomAgent
 ```
 
-The `helper.template.Agent` is a template class for agents. It has two functions implemented:
-
- * `test()` runs the agent locally.
- * `submit()` submits the agent to the CrowdAI server.
-
-Both `test()` and `submit()` use `Agent.act()` to select action, so you need to implement it. Check the `RandomAgent.act()` for an example.
+To test `RandomAgent` locally with visualization, run,
 
 ```python
-class RandomAgent(Agent):
+./run.py RandomAgent -v
+```
+
+To submit `RandomAgent` to CrowdAI, run
+
+```python
+./run.py RandomAgent -s
+```
+
+Note that you need to first add your API token to `CONFIG.py` to submit any agents. Also note that you can only submit 5 times each 24 hours.
+
+
+
+## Create an Agent
+
+The `/agent` directory contains `DoNothingAgent` to serve as an example for custom agents.
+
+```python
+from helper.template import Agent
+
+
+class DoNothingAgent(Agent):
+    """
+    An agent that chooses NOOP action at every timestep.
+    """
     def __init__(self, env):
-        self.env = env
+        self.action = [0] * 19
 
     def act(self, observation):
-        return self.env.action_space.sample().tolist()
+        return self.action
 ```
 
-The `RandomAgent` class inherits `helper.template.Agent` and overrides `__init__()` and `act()`.
+To be compatible with `run.py`, the agent must inherit from `Agent` from `helper.template`. The agent must also define `.act()` function that returns an action given an observation.
 
-**It seems like the server (or the communication to server) cannot handle NumPy, so the action should be converted to native Python with `.tolist()`.**
 
-```python
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Run or submit agent')
-    parser.add_argument('-s', '--submit', action='store_true', default=False)
-    args = parser.parse_args()
-    
-    if args.submit:
-        # Submit agent
-        env = ProstheticsEnv(visualize=False)
-        agent = RandomAgent(env)
-        agent.submit()
-    else:
-        # Run agent locally
-        env = ProstheticsEnv(visualize=True)
-        agent = RandomAgent(env)
-        agent.test(env)
-```
-
-To help you run agent locally or submit agent easily, we used an argument parser. You can run the agent locally with the following command:
-
-```bash
-python3 example.py
-```
-
-To submit the agent, you should first go to `CONFIG.py` and add your `crowdai_token`. Then, you can submit the agent to the server with the following command:
-
-```bash
-python3 example.py -s
-```
 
 ## FAQ
 
@@ -74,3 +62,4 @@ https://www.crowdai.org/participants/[username]
 ```
 
 You should see the text `API key: XXXX`. That is your token!
+
