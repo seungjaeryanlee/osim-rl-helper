@@ -16,6 +16,7 @@ import argparse
 from osim.env import ProstheticsEnv
 
 from helper.baselines import *
+from agents import *
 
 
 if __name__ == '__main__':
