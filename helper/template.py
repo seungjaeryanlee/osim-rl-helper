@@ -15,7 +15,22 @@ class Agent:
     def __init__(self):
         pass
 
-    def act(self, observation):        
+    def act(self, observation):
+        """
+        Return action given an observation from the environment.
+        """
+        pass
+
+    def before_episode(self):
+        """
+        Run before the start of every episode.
+        """
+        pass
+
+    def after_episode(self):
+        """
+        Run after the end of every episode.
+        """
         pass
 
     def test(self, env):
@@ -31,6 +46,8 @@ class Agent:
         print('[test] Sanity check passed')
         print('[test] Running \'{}\''.format(type(self).__name__))
         observation = env.reset()
+        print('[test] Setup agent before episode starts')
+        self.before_episode()
         total_reward = 0
         done = False
         while not done:
@@ -40,6 +57,9 @@ class Agent:
 
         print('[test] Total Reward of \'{}\': {}'.format(type(self).__name__,
                                                         total_reward))
+
+        print('[test] Cleanup agent after episode terminated')
+        self.after_episode()
 
     def sanity_check(self):
         """
@@ -68,6 +88,8 @@ class Agent:
         print('[submit] Running \'{}\' on Server environment'.format(type(self).__name__))
         client = Client(remote_base)
         observation = client.env_create(crowdai_token, env_id='ProstheticsEnv')
+        print('[submit] Setup agent before episode starts')
+        self.before_episode()
 
         episode_count = 1
         step_count = 0
@@ -79,7 +101,11 @@ class Agent:
             total_reward += reward
             if done:
                 print('[submit] Episode {} Total reward: {}'.format(episode_count, total_reward))
+                print('[submit] Cleanup agent after episode terminated')
+                self.after_episode()
                 observation = client.env_reset()
+                print('[submit] Setup agent before episode starts')
+                self.before_episode()
                 episode_count += 1
                 step_count = 0
                 total_reward = 0
