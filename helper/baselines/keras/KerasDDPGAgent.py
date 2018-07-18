@@ -12,7 +12,7 @@ from osim.env import ProstheticsEnv
 from osim.http.client import Client
 
 from helper.template import KerasAgent
-from helper.wrappers import ClientToEnv, DictToList, JSONable
+from helper.wrappers import ClientToEnv, DictToListLegacy, JSONable
 from helper.CONFIG import remote_base, crowdai_token
 
 

@@ -2,7 +2,7 @@ import json
 
 from osim.http.client import Client
 
-from .wrappers import ClientToEnv, DictToList, JSONable
+from .wrappers import ClientToEnv, DictToListLegacy, JSONable
 from .CONFIG import remote_base, crowdai_token
 
 
@@ -191,7 +191,7 @@ class KerasAgent:
         print('[submit] Successfully connected!')
 
         env = ClientToEnv(client)
-        env = DictToList(env)
+        env = DictToListLegacy(env)
         env = JSONable(env)
 
         print('[submit] Running \'{}\''.format(type(self).__name__))

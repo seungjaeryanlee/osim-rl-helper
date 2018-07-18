@@ -1,7 +1,11 @@
-class DictToList:
+class DictToListLegacy:
     def __init__(self, env):
         """
-        Formats Dictionary-type observation to List-type observation.
+        DEPRECATED
+        A legacy wrapper that formats dict-type observation to list-type
+        observation. Has the same effect as setting project=False in env.reset()
+        or env.step(). This wrapper contains bugs and exists only for legacy
+        purposes.
         """
         self.env = env
 
@@ -15,9 +19,11 @@ class DictToList:
 
     def _get_observation(self, state_desc):
         """
-        Code from ProstheticsEnv.get_observation().
+        Code from ProstheticsEnv.get_observation(). Contains bug described in
+        issue #129 in stanfordnmbl/osim-rl GitHub repository.
 
         https://github.com/stanfordnmbl/osim-rl/blob/master/osim/env/osim.py
+        https://github.com/stanfordnmbl/osim-rl/issues/129
         """
         # Augmented environment from the L2R challenge
         res = []
