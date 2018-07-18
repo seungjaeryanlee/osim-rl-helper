@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class ClientToEnv:
     def __init__(self, client):
         """

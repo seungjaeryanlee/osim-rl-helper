@@ -33,7 +33,7 @@ Note that you need to first add your API token to `CONFIG.py` to submit any agen
 The `/agent` directory contains `DoNothingAgent` to serve as an example for custom agents.
 
 ```python
-from helper.template import Agent
+from helper.templates import Agent
 
 
 class DoNothingAgent(Agent):
@@ -47,7 +47,7 @@ class DoNothingAgent(Agent):
         return self.action
 ```
 
-To be compatible with `run.py`, the agent must inherit from `Agent` from `helper.template`. The agent must also define `.act()` function that returns an action given an observation.
+To be compatible with `run.py`, the agent must inherit from `Agent` from `helper.templates`. The agent must also define `.act()` function that returns an action given an observation.
 
 
 

@@ -1,4 +1,4 @@
-from helper.template import Agent
+from helper.templates import Agent
 
 
 class DoNothingAgent(Agent):

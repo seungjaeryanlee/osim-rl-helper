@@ -1,4 +1,4 @@
-from ..template import Agent
+from ..templates import Agent
 
 
 class FixedActionAgent(Agent):
