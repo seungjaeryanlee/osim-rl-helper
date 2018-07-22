@@ -21,12 +21,22 @@ class TensorforcePPOAgent:
         self.env = DictToListFull(env)
     
     def test(self, env):
-        # Poll new state from client
+        self.load()
         state = self.env.reset(project=False)
-        import numpy as np
-        # Get prediction from agent, execute
-        action = self.agent.act(state)
-        obs, rew, done, info = self.env.step(action, project=False)
+        done = False
+        total_rew = 0
+        while not done:
+            action = self.agent.act(state)
+            obs, rew, done, info = self.env.step(action, project=False)
+            total_rew += rew
+            self.agent.observe(reward=rew, terminal=done)
+        print('Total reward: ' + str(total_rew))
+        self.save()
+    
+    def save(self):
+        self.agent.save_model(directory="./TensorforcePPOAgent/")
+        print('[save] Saved pretrained model successfully.')
 
-        # Add experience, agent automatically updates model according to batch size
-        self.agent.observe(reward=rew, terminal=done)
+    def load(self):
+        self.agent.restore_model(directory="./TensorforcePPOAgent/")
+        print('[load] Loaded pretrained model successfully.')
