@@ -3,7 +3,7 @@ class DictToListFull:
         """
         A wrapper that formats dict-type observation to list-type observation.
         Appends all meaningful unique numbers in the dict-type observation to a
-        list. The resulting list has length 344.
+        list. The resulting list has length 347.
         """
         self.env = env
 
@@ -24,7 +24,7 @@ class DictToListFull:
 
     def _dict_to_list(self, state_desc):
         """
-        Return observation list of length 344 given a dict-type observation.
+        Return observation list of length 347 given a dict-type observation.
 
         For more details about the observation, visit this page:
         http://osim-rl.stanford.edu/docs/nips2018/observation/
@@ -68,9 +68,9 @@ class DictToListFull:
             res += state_desc['forces'][force]
 
         # Center of Mass Observations
-        res.append(state_desc['misc']['mass_center_pos'])
-        res.append(state_desc['misc']['mass_center_vel'])
-        res.append(state_desc['misc']['mass_center_acc'])
+        res += state_desc['misc']['mass_center_pos']
+        res += state_desc['misc']['mass_center_vel']
+        res += state_desc['misc']['mass_center_acc']
 
         return res
 
