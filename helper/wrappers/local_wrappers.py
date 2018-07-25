@@ -1,10 +1,15 @@
-class ForceDictObservation:
+from .Wrapper import EnvironmentWrapper
+
+
+class ForceDictObservation(EnvironmentWrapper):
     def __init__(self, env):
+        """
+        Environment wrapper that wraps local environment to use dict-type
+        observation by setting project=False. This can be deprecated once
+        the default observation is dict-type rather than list-type.
+        """
+        super().__init__(env)
         self.env = env
-        if hasattr(self.env, 'submit'):
-            self.submit = self.env.submit
-        if hasattr(self.env, 'action_space'):
-            self.action_space = self.env.action_space
         self.time_limit = 300
     
     def reset(self):
