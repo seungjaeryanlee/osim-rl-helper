@@ -77,7 +77,7 @@ class TensorforceAgent(Agent):
         """
         try:
             print('[submit] Loading weights from \'{}\''.format(self.directory))
-            self.agent.load_weights(self.directory)
+            self.agent.restore_model(directory=self.directory)
             print('[submit] Successfully loaded weights from \'{}\''.format(self.directory))
         except ValueError:
             print('[submit] Unable to find pretrained model from \'{}\'. Aborting.'.format(self.directory))
@@ -85,24 +85,26 @@ class TensorforceAgent(Agent):
 
         print('[submit] Running \'{}\''.format(type(self).__name__))
         obs = env.reset()
-        episode_count = 0
+        episode_count = 1
         step_count = 0
         total_rew = 0
-        while True:
-            action = self.act(obs)
-            obs, rew, done, info = env.step(action)
-            total_rew += rew
-            if done:
-                print('[submit] Episode {} | Steps Taken: {:3} | Total reward: {}'.format(episode_count, step_count, total_rew))
-                obs = env.reset()
-                episode_count += 1
-                step_count = 0
-                total_rew = 0
-                if not obs:
-                    break
-            step_count += 1
+        try:
+            while True:
+                action = self.act(obs)
+                obs, rew, done, info = env.step(action)
+                total_rew += rew
+                step_count += 1
+                if done:
+                    print('[submit] Episode {} | Steps Taken: {:3} | Total reward: {}'.format(episode_count, step_count, total_rew))
+                    obs = env.reset()
+                    episode_count += 1
+                    step_count = 0
+                    total_rew = 0
+        except TypeError:
+            # When observation is None - no more steps left
+            pass
 
-        print('[submit] Finished Running \'{}\' on Server environment. Submitting results to server...'.format(type(self).__name__))
+        print('[submit] Finished running \'{}\' on Server environment. Submitting results to server...'.format(type(self).__name__))
         env.submit()
         print('[submit] Submitted results successfully!')
 
