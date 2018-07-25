@@ -13,8 +13,12 @@ You can submit FixedActionAgent with visuals with following command:
     ./run.py FixedActionAgent -s
 """
 import argparse
-from osim.env import ProstheticsEnv
 
+from osim.env import ProstheticsEnv
+from osim.http.client import Client
+
+from helper.wrappers import ClientToEnv, DictToListFull, ForceDictObservation, JSONable
+from helper.CONFIG import remote_base, crowdai_token
 from helper.baselines import *
 from agents import *
 
@@ -42,16 +46,27 @@ if __name__ == '__main__':
 
     if args.submit:
         # Submit agent
-        env = ProstheticsEnv(visualize=False)
-        agent = SpecifiedAgent(env)
-        agent.submit()
+        client = Client(remote_base)
+        client.env_create(crowdai_token, env_id='ProstheticsEnv')
+        client_env = ClientToEnv(client)
+        client_env = DictToListFull(client_env)
+        client_env = JSONable(client_env)
+        agent = SpecifiedAgent(client_env.observation_space,
+                               client_env.action_space)
+        agent.submit(client_env)
     elif args.nb_steps:
         # Train agent locally
         env = ProstheticsEnv(visualize=args.visualize)
-        agent = SpecifiedAgent(env)
+        env = ForceDictObservation(env)
+        env = DictToListFull(env)
+        env = JSONable(env)
+        agent = SpecifiedAgent(env.observation_space, env.action_space)
         agent.train(env, int(args.nb_steps))
     else:
         # Test agent locally
         env = ProstheticsEnv(visualize=args.visualize)
-        agent = SpecifiedAgent(env)
+        env = ForceDictObservation(env)
+        env = DictToListFull(env)
+        env = JSONable(env)
+        agent = SpecifiedAgent(env.observation_space, env.action_space)
         agent.test(env)
