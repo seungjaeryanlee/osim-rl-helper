@@ -7,7 +7,9 @@ from .Wrapper import EnvironmentWrapper
 class ClientToEnv:
     def __init__(self, client):
         """
-        Reformats client environment to a local environment format.
+        Wrapper that reformats client environment to a local environment format,
+        complete with observation_space, action_space, reset, step, submit, and
+        time_limit.
         """
         self.client = client
         self.reset = client.env_reset
@@ -21,7 +23,8 @@ class ClientToEnv:
 class JSONable(EnvironmentWrapper):
     def __init__(self, env):
         """
-        Converts NumPy ndarray type actions to list.
+        Environment Wrapper that converts NumPy ndarray type actions to list.
+        This wrapper is needed for communicating with the client for submission.
         """
         super().__init__(env)
         self.env = env
