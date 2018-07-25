@@ -1,18 +1,13 @@
-import json
+from .Agent import Agent
 
-from osim.http.client import Client
-
-from ..wrappers import ClientToEnv, DictToListFull, JSONable
-from ..CONFIG import remote_base, crowdai_token
-
-
-class KerasAgent:
-    def __init__(self):
+class KerasAgent(Agent):
+    def __init__(self, observation_space, action_space, filename):
         """
         Template class for agents using Keras RL library.
         """
-        self.agent = None
-        self.filename = None
+        self.observation_space = observation_space
+        self.action_space = action_space
+        self.filename = filename
 
     def train(self, env, nb_steps):
         """
@@ -50,7 +45,7 @@ class KerasAgent:
         self.agent.test(env, nb_episodes=1, visualize=False, nb_max_episode_steps=500)
         print('[test] Finished test')
 
-    def submit(self):
+    def submit(self, env):
         """
         Submit agent to CrowdAI server.
         """
@@ -62,15 +57,6 @@ class KerasAgent:
             print('[submit] Unable to find pretrained model {}. Aborting.'.format(self.filename))
             return
 
-        print('[submit] Connecting to client...')
-        client = Client(remote_base)
-        client.env_create(crowdai_token, env_id='ProstheticsEnv')
-        print('[submit] Successfully connected!')
-
-        env = ClientToEnv(client)
-        env = DictToListFull(env)
-        env = JSONable(env)
-
         print('[submit] Running \'{}\''.format(type(self).__name__))
         try:
             self.agent.test(env, nb_episodes=3, visualize=False, nb_max_episode_steps=500)
@@ -78,5 +64,5 @@ class KerasAgent:
             # When observation is None - no more steps left
             pass
         print('[submit] Finished Running \'{}\' on Server environment. Submitting results to server...'.format(type(self).__name__))
-        client.submit()
+        env.submit()
         print('[submit] Submitted results successfully!')

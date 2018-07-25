@@ -1,3 +1,7 @@
+import gym
+import numpy as np
+
+
 class DictToListFull:
     def __init__(self, env):
         """
@@ -6,6 +10,16 @@ class DictToListFull:
         list. The resulting list has length 347.
         """
         self.env = env
+        if hasattr(self.env, 'submit'):
+            self.submit = self.env.submit
+        if hasattr(self.env, 'action_space'):
+            self.action_space = self.env.action_space
+        if hasattr(self.env, 'time_limit'):
+            self.time_limit = self.env.time_limit
+        self.observation_space = gym.spaces.Box(low=-float('Inf'),
+                                                high=float('Inf'),
+                                                shape=(347, ),
+                                                dtype=np.float32)
 
     def reset(self, project=None):
         if project is not None:
@@ -85,6 +99,16 @@ class DictToListLegacy:
         bugs and exists only for legacy purposes.
         """
         self.env = env
+        if hasattr(self.env, 'submit'):
+            self.submit = self.env.submit
+        if hasattr(self.env, 'action_space'):
+            self.action_space = self.env.action_space
+        if hasattr(self.env, 'time_limit'):
+            self.time_limit = self.env.time_limit
+        self.observation_space = gym.spaces.Box(low=-float('Inf'),
+                                                high=float('Inf'),
+                                                shape=(158, ),
+                                                dtype=np.float32)
 
     def reset(self):
         state_desc = self.env.reset()
