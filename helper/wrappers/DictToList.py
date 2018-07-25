@@ -1,39 +1,29 @@
 import gym
 import numpy as np
 
+from .Wrapper import EnvironmentWrapper
 
-class DictToListFull:
+
+class DictToListFull(EnvironmentWrapper):
     def __init__(self, env):
         """
         A wrapper that formats dict-type observation to list-type observation.
         Appends all meaningful unique numbers in the dict-type observation to a
         list. The resulting list has length 347.
         """
+        super().__init__(env)
         self.env = env
-        if hasattr(self.env, 'submit'):
-            self.submit = self.env.submit
-        if hasattr(self.env, 'action_space'):
-            self.action_space = self.env.action_space
-        if hasattr(self.env, 'time_limit'):
-            self.time_limit = self.env.time_limit
         self.observation_space = gym.spaces.Box(low=-float('Inf'),
                                                 high=float('Inf'),
                                                 shape=(347, ),
                                                 dtype=np.float32)
 
-    def reset(self, project=None):
-        if project is not None:
-            state_desc = self.env.reset(project=project)
-        else:
-            state_desc = self.env.reset()
+    def reset(self):
+        state_desc = self.env.reset()
         return self._dict_to_list(state_desc)
 
-    def step(self, action, project=None):
-
-        if project is not None:
-            state_desc, reward, done, info = self.env.step(action, project=project)
-        else:
-            state_desc, reward, done, info = self.env.step(action)
+    def step(self, action):
+        state_desc, reward, done, info = self.env.step(action)
         return [self._dict_to_list(state_desc), reward, done, info]
 
     def _dict_to_list(self, state_desc):
@@ -89,7 +79,7 @@ class DictToListFull:
         return res
 
 
-class DictToListLegacy:
+class DictToListLegacy(EnvironmentWrapper):
     def __init__(self, env):
         """
         DEPRECATED
@@ -98,13 +88,8 @@ class DictToListLegacy:
         or env.step(). The resulting list has length 158. This wrapper contains
         bugs and exists only for legacy purposes.
         """
+        super().__init__(env)
         self.env = env
-        if hasattr(self.env, 'submit'):
-            self.submit = self.env.submit
-        if hasattr(self.env, 'action_space'):
-            self.action_space = self.env.action_space
-        if hasattr(self.env, 'time_limit'):
-            self.time_limit = self.env.time_limit
         self.observation_space = gym.spaces.Box(low=-float('Inf'),
                                                 high=float('Inf'),
                                                 shape=(158, ),

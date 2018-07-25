@@ -1,6 +1,8 @@
 import gym
 import numpy as np
 
+from .Wrapper import EnvironmentWrapper
+
 
 class ClientToEnv:
     def __init__(self, client):
@@ -16,21 +18,13 @@ class ClientToEnv:
                                            dtype=np.float32)
 
 
-class JSONable:
+class JSONable(EnvironmentWrapper):
     def __init__(self, env):
         """
         Converts NumPy ndarray type actions to list.
         """
+        super().__init__(env)
         self.env = env
-        self.reset = self.env.reset
-        if hasattr(self.env, 'submit'):
-            self.submit = self.env.submit
-        if hasattr(self.env, 'observation_space'):
-            self.observation_space = self.env.observation_space
-        if hasattr(self.env, 'action_space'):
-            self.action_space = self.env.action_space
-        if hasattr(self.env, 'time_limit'):
-            self.time_limit = self.env.time_limit
 
     def step(self, action):
         if type(action) == np.ndarray:
