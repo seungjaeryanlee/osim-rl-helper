@@ -105,3 +105,6 @@ class TensorforceAgent(Agent):
         print('[submit] Finished Running \'{}\' on Server environment. Submitting results to server...'.format(type(self).__name__))
         env.submit()
         print('[submit] Submitted results successfully!')
+
+    def act(self, obs):
+        return self.agent.act(obs)
