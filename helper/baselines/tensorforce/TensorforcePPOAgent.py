@@ -19,7 +19,7 @@ class TensorforcePPOAgent(TensorforceAgent):
             batching_capacity=1000,
             step_optimizer=dict(
                 type='adam',
-                learning_rate=1e-4
+                learning_rate=1e-3
             )
         )
         self.directory = directory
