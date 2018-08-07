@@ -45,20 +45,24 @@ class Agent:
         episode_count = 1
         step_count = 0
         total_reward = 0
-        while True:
-            print('[submit] Episode {} Step {}'.format(episode_count, step_count))
-            action = self.act(observation)
-            observation, reward, done, info = env.step(action)
-            total_reward += reward
-            if done:
-                print('[submit] Episode {} Total reward: {}'.format(episode_count, total_reward))
-                observation = env.reset()
-                episode_count += 1
-                step_count = 0
-                total_reward = 0
-                if not observation:
-                    break
-            step_count += 1
+        try:
+            while True:
+                print('[submit] Episode {} Step {}'.format(episode_count, step_count))
+                action = self.act(observation)
+                observation, reward, done, info = env.step(action)
+                total_reward += reward
+                if done:
+                    print('[submit] Episode {} Total reward: {}'.format(episode_count, total_reward))
+                    observation = env.reset()
+                    episode_count += 1
+                    step_count = 0
+                    total_reward = 0
+                    if not observation:
+                        break
+                step_count += 1
+        except TypeError:
+            # When observation is None - no more steps left
+            pass
 
         print('[submit] Finished Running \'{}\' on Server environment. Submitting results to server...'.format(type(self).__name__))
         env.submit()
