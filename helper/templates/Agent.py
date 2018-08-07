@@ -41,8 +41,6 @@ class Agent:
         """
         print('[submit] Running \'{}\' on Server environment'.format(type(self).__name__))
         observation = env.reset()
-        print('[submit] Setup agent before episode starts')
-        self.before_episode()
 
         episode_count = 1
         step_count = 0
@@ -54,11 +52,7 @@ class Agent:
             total_reward += reward
             if done:
                 print('[submit] Episode {} Total reward: {}'.format(episode_count, total_reward))
-                print('[submit] Cleanup agent after episode terminated')
-                self.after_episode()
                 observation = env.reset()
-                print('[submit] Setup agent before episode starts')
-                self.before_episode()
                 episode_count += 1
                 step_count = 0
                 total_reward = 0
