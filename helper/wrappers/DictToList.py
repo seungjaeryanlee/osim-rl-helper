@@ -15,7 +15,7 @@ class DictToListFull(EnvironmentWrapper):
         self.env = env
         self.observation_space = gym.spaces.Box(low=-float('Inf'),
                                                 high=float('Inf'),
-                                                shape=(347, ),
+                                                shape=(350, ),
                                                 dtype=np.float32)
 
     def reset(self):
